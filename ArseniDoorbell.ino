@@ -186,8 +186,9 @@ void wifiSetup() {
 
 void processNet() {
   if (WiFi.status() == WL_CONNECTED) {
-    ArduinoOTA.begin();
-    ArduinoOTA.handle();
+    //ArduinoOTA.begin();
+    //ArduinoOTA.begin();
+    //ArduinoOTA.handle();
     if (client.connected()) {
       client.loop();
     } else {
@@ -207,7 +208,7 @@ void processNet() {
 }
 
 volatile unsigned long lastEvent = 0;
-volatile boolean status = 0;
+volatile byte status = 0;
 
 #define CHECKWAIT 500
 #define PRESSWAIT 1000
