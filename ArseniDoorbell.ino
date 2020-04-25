@@ -21,6 +21,7 @@
 #define NewAddr 250
 #define EPversion 1
 #define WIFIwait 25000
+#define MQTTwait 5000
 
 #define PULL_PIN 2
 #define LED_PIN 1
@@ -37,6 +38,7 @@ void processNet();
 void interrupt();
 
 boolean pendingDisconnect = true;
+unsigned long lastMQTTconnect;
 
 WiFiClient wclient;
 PubSubClient client(MQTTip, MQTTport, mqttDataCb, wclient);
@@ -191,7 +193,8 @@ void processNet() {
     //ArduinoOTA.handle();
     if (client.connected()) {
       client.loop();
-    } else {
+    } else if (millis() - lastMQTTconnect > MQTTwait) {
+      lastMQTTconnect = millis();
       if (client.connect(MQTTid, MQTTuser, MQTTpsw, MQTTid "/status", 2, true, "0")) {
           pendingDisconnect = false;
           mqttConnectedCb();
